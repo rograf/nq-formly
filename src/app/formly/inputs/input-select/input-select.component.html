@@ -1,0 +1,7 @@
+<div [formGroup]="form">
+  <select [formControlName]="field.key || ''" [id]="field.id" (change)="onChange()">
+    @for (option of field.props.options(); track $index) {
+      <option [value]="option.value">{{ option.label }}</option>
+    }
+  </select>
+</div>

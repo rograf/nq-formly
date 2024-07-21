@@ -1,0 +1,8 @@
+<div [formGroup]="form">
+  <input class="form-control" 
+    [formControlName]="field.key" 
+    [id]="field.id" 
+    [type]="field.props.type || 'text'" 
+    [readonly]="field.props.readonly || false" 
+  >
+</div>

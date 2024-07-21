@@ -1,0 +1,11 @@
+<div [formGroup]="form">
+  <label class="switch">
+    <input type="checkbox"
+      [formControlName]="field.key" 
+      [id]="field.id" 
+      (change)="onChange()"
+    >
+    <span class="slider"></span>
+    <span class="label-text">{{field?.props?.label}}</span>
+  </label>
+</div>
