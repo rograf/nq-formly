@@ -61,7 +61,17 @@ export class AppComponent {
         min: 2,
         address: {
           city: 'New York'
-        }
+        },
+        todos: [
+          {
+            title: 'First todo',
+            completed: true,
+          },
+          {
+            title: 'Second todo',
+            completed: false,
+          }
+        ]
        });
     }, 200);
 
@@ -229,9 +239,12 @@ export class AppComponent {
   }
 
   onSubmit() {
+    console.log('xxxxxxxxxxxxxxxxxxxxx')
     console.log('pending', this.form.pending) // async validators
     console.log('valid', this.form.valid)
-    console.log(this.form.value)
+    console.log('form', this.form.value)
+    console.log('model', this.model())
+    console.log('xxxxxxxxxxxxxxxxxxxxx')
     // alert(JSON.stringify(this.model()));
   }
 

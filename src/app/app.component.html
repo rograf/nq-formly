@@ -1,6 +1,6 @@
-<h1>Model: {{model() | json}}</h1>
+<!-- <h1>Model: {{model() | json}}</h1> -->
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <div class="border pt-2 mb-2">
+  <div class="border rounded p-2 mb-2">
     <nq-formly [form]="form" [fields]="fields" [model]="model"></nq-formly>
   </div>
   <div class="d-flex justify-content-end">

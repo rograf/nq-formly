@@ -1,1 +1,56 @@
-/* You can add global styles to this file, and also import other style files */
+.border {
+  border: 1px solid #000;
+}
+
+.rounded {
+  border-radius: 0.25rem;
+}
+
+$spacings: (0: 0, 1: 0.25rem, 2: 0.5rem, 3: 0.75rem, 4: 1rem, 5: 2rem);
+$breakpoints: (
+  xs: 0,
+  sm: 480px,
+  md: 768px,
+  lg: 1024px,
+  xl: 1440px,
+  xxl: 1920px
+);
+$directions: (t: top, b: bottom, s: start, e: end, x: x, y: y, a: all);
+$properties: (m: margin, p: padding);
+
+@mixin generate-spacings($property, $direction, $space) {
+
+    $property-value: map-get($properties, $property);
+    $direction-value: map-get($directions, $direction);
+    $space-value: map-get($spacings, $space);
+
+    @if $direction == x {
+      .#{$property}x-#{$space} {
+          #{$property-value}-left: #{$space-value}!important;
+          #{$property-value}-right: #{$space-value}!important;
+      }
+  } @else if $direction == y {
+      .#{$property}y-#{$space} {
+          #{$property-value}-top: #{$space-value}!important;
+          #{$property-value}-bottom: #{$space-value}!important;
+      }
+  } @else if $direction == a {
+      .#{$property}-#{$space} {
+          #{$property-value}: #{$space-value}!important;
+      }
+  } @else {
+      $direction-value: map-get($directions, $direction);
+      .#{$property}#{$direction}-#{$space} {
+          #{$property-value}-#{$direction-value}: #{$space-value}!important;
+      }
+  }
+
+}
+
+@each $property, $dir-full in $properties {
+  @each $direction, $dir-full in $directions {
+    @each $space, $dir-full in $spacings {
+      @include generate-spacings($property, $direction, $space);
+    }
+  }
+}
