@@ -21,11 +21,21 @@ export class InputRepeatComponent extends InputField  {
   modelGroup = signal<any>([]);
 
   ngOnInit(){
-    console.log(this.field.fields());
+      const currentValues = getDescendantProp(this.model(), this.field.key) as any;
+      const currentLenght = this.arrayFields().length;
+      const currentModelLenght = currentValues?.length || 0;
+      console.log('currentLenght', currentLenght);
+      console.log('currentModelLenght', currentModelLenght);
+      if(currentValues && currentValues.length){
+        for(let i = 0; i < currentValues.length; i++){
+          if(currentLenght <= i){
+            this.addGroup(currentValues[i]);
+          }
+        }
+      }
   }
 
   addGroup(value = {}){
-    console.log('111')
     if(this.field.fields && this.field.key){
       const formGroup = new FormGroup({});
       formGroup.patchValue(value);
@@ -36,16 +46,14 @@ export class InputRepeatComponent extends InputField  {
         setDescendantProp(this.model(), this.field.key, []);
       }
 
-      const model3:any = getDescendantProp(this.model(), this.field.key);
-      const model4 = [
-        ...model3,
-        {}
-      ]
-      setDescendantProp(this.model(), this.field.key, model4);    
+      let existModel = getDescendantProp(this.model(), this.field.key)[currentIndex];
+      if(!existModel){
+        isExistArrayInModel[currentIndex] = {};
+        setDescendantProp(this.model(), this.field.key, isExistArrayInModel);
+        existModel = getDescendantProp(this.model(), this.field.key)[currentIndex];
+      }
 
-      const model2 = getDescendantProp(this.model(), this.field.key);
-      
-      const model = signal<any>(model2[currentIndex] );
+      const model = signal<any>(existModel);
 
       this.arrayFields.set([
         ...this.arrayFields(),

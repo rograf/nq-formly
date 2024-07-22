@@ -3,7 +3,7 @@
     <div [formArrayName]="field.key">
       @for (arrayField of arrayFields(); track arrayField; let first = $first; let last = $last) {
 
-        <div [formGroupName]="$index" class="border bg-light mb-3 p-2">
+        <div [formGroupName]="$index" class="border rounded mb-3 p-2">
         
           <nq-formly-field [fields]="field.fields" [form]="arrayField.form" [model]="arrayField.model" class="{{field.props.wrappClassName}}"></nq-formly-field>
   
