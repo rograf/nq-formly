@@ -1,7 +1,7 @@
 @for (field of fieldsToDisplay(); track field.id) {
   @if (!field.hidden) {
-    <div class="mb-f3 {{field.props.className}}">
-      @if (field.key) {
+    <div class="mb-f3 {{field?.props?.className}}">
+      @if (field?.key) {
         @if (form.controls[field.key]; as control) {
           @if (field.props.label && !field.props.customLabel) {
             <label [attr.for]="field?.id" class="form-label">
@@ -23,7 +23,7 @@
       }
     
       @if (!field.key && field.fields){
-        <nq-formly-field [fields]="field.fields" [form]="form" [model]="model" class="mb-f3 {{field.props.wrappClassName}}"></nq-formly-field>
+        <nq-formly-field [fields]="field.fields" [form]="form" [model]="model" class="mb-f3 {{field?.props?.wrappClassName}}"></nq-formly-field>
       }
   
       @if (field?.props?.description) {

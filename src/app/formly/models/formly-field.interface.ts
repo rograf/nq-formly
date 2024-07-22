@@ -13,6 +13,7 @@ export interface OptionFormlyField {
 export interface FormlyField {
   value?: any;
   key?: string;
+  id?: string;
   hidden?: boolean;
   component?: any;
   customValidators?: any;

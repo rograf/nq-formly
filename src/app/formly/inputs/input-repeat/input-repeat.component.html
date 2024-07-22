@@ -1,0 +1,50 @@
+@if (field.key && field.fields()) {
+  <div [formGroup]="form" >
+    <div [formArrayName]="field.key">
+      @for (arrayField of arrayFields(); track arrayField; let first = $first; let last = $last) {
+
+        <div [formGroupName]="$index" class="border bg-light mb-3 p-2">
+        
+          <nq-formly-field [fields]="field.fields" [form]="arrayField.form" [model]="arrayField.model" class="{{field.props.wrappClassName}}"></nq-formly-field>
+  
+          <!-- <div class="d-flex justify-content-between">
+            <div>
+              @if ($index !==moveIndex && (moveIndex || moveIndex === 0)) {
+                @if ($index > moveIndex) {
+                    <button class="btn btn-icon p-0 px-2" (click)="changeOrder(moveIndex, $index + 1)">
+                      <nq-icon name="chevron-down"></nq-icon>
+                    </button>
+                  } 
+                  @else {
+                    <button class="btn btn-icon p-0 px-2" (click)="changeOrder(moveIndex, $index)">
+                      <nq-icon name="chevron-up"></nq-icon>
+                    </button>
+                  }
+              }
+            </div>
+            <div class="d-flex">
+              <button class="btn btn-icon p-0 px-2" type="button" (click)="cut($index)">
+                <nq-icon name="scissors"></nq-icon>
+              </button>
+              <button class="btn btn-icon p-0 px-2" type="button" [disabled]="last" (click)="changeOrder($index, $index + 1)">
+                <nq-icon name="chevron-down"></nq-icon>
+              </button>
+              <button class="btn btn-icon p-0 px-2" type="button" [disabled]="first" (click)="changeOrder($index, $index - 1)">
+                <nq-icon name="chevron-up"></nq-icon>
+              </button>
+              <button class="btn text-danger btn-icon p-0 px-2" type="button" (click)="removeGroup($index)">
+                <nq-icon name="trash"></nq-icon>
+              </button>
+            </div>
+          </div> -->
+        </div>
+
+
+      }
+    </div>
+  </div>
+  <div>
+    <button class="btn btn-primary btn-add" type="button" (click)="addGroup()">Add</button>
+  </div>
+
+}

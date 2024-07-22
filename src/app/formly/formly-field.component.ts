@@ -28,31 +28,41 @@ export class FormlyFieldComponent {
     this.fieldsToDisplay.set([]);
     const model = this.model();
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
+    console.log(1111)
     this.fields().forEach((field: any) => {
-      field.id = field.key + '_' + new Date().getTime();
-      this.form.removeControl(field.key);
-      const modelValue = getDescendantProp(model, field.key);
-      const formControl = new FormControl(modelValue || field.value);
-      this.form.addControl(field.key, formControl);
-      setTimeout(() => {
-        const subscription = formControl.valueChanges.subscribe((value) => {
-          const oldValue = getDescendantProp(model, field.key);
-          if(value && field?.props?.type === 'number'){
-            value = Number(value) as any;
-          }
-          if (oldValue !== value && (value !== null || oldValue !== undefined)) {
-            if (field.key) {
-              setDescendantProp(model, field.key, value);
+      if(field.key && field.fields){
+        this.form.removeControl(field.key);
+        this.form.addControl(field.key || '', new FormArray(field.value || []));
+      } else {
+        if(!field.id){
+          field.id = field.key + '_' + new Date().getTime();
+        }
+        this.form.removeControl(field.key);
+        let modelValue = getDescendantProp(model, field.key) as any;
+        if(modelValue === undefined){
+          modelValue = field.value
+        }
+        const formControl = new FormControl(modelValue);
+        this.form.addControl(field.key, formControl);
+          const subscription = formControl.valueChanges.subscribe((value) => {
+            const oldValue = getDescendantProp(model, field.key);
+            if(value && field?.props?.type === 'number'){
+              value = Number(value) as any;
             }
-            checkFieldsExpressions(this.fields(), model, this.form);
-          }
+            if (oldValue !== value && (value !== null || oldValue !== undefined)) {
+              console.log('value', field.id);
+              if (field.key) {
+                setDescendantProp(model, field.key, value);
+              }
+              checkFieldsExpressions(this.fields(), model, this.form, field.id);
+            }
+          });
+          this.subscriptions.push(subscription);
+        checkFieldsExpressions(this.fields(), model, this.form, field.id);
+        setTimeout(() => {
+          this.fieldsToDisplay.set(this.fields());
         });
-        this.subscriptions.push(subscription);
-      });
-    });
-    checkFieldsExpressions(this.fields(), model, this.form);
-    setTimeout(() => {
-      this.fieldsToDisplay.set(this.fields());
+      }
     });
   }, {
     allowSignalWrites: true

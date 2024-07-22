@@ -1,7 +1,7 @@
 import { FormGroup, Validators } from "@angular/forms";
 import { FormlyField } from "../models/formly-field.interface";
 
-export const checkFieldsExpressions = (fields: FormlyField[], model: any, form: FormGroup) => {
+export const checkFieldsExpressions = (fields: FormlyField[], model: any, form: FormGroup, fieldId:string) => {
   if(fields){
     fields.forEach((formyField:FormlyField) => {
       if(formyField.key){
@@ -34,6 +34,7 @@ export const checkFieldsExpressions = (fields: FormlyField[], model: any, form: 
         }
         if(formyField.validators){
           field?.clearValidators();
+          field?.clearAsyncValidators();
           if(!formyField.hidden){
             for(let key in formyField?.validators){
               let value;
@@ -50,8 +51,10 @@ export const checkFieldsExpressions = (fields: FormlyField[], model: any, form: 
               if(value){
                 if(formyField.customValidators?.[key]){
                   field?.addValidators(formyField.customValidators[key](value));
-                } else if(formyField.asyncValidators?.[key]){ 
-                  field?.addAsyncValidators(formyField.asyncValidators[key](value));
+                } else if(formyField.asyncValidators?.[key]){
+                  if(fieldId === formyField.id){
+                    field?.addAsyncValidators(formyField.asyncValidators[key](value));
+                  }
                 } else {
                   if(key === 'required'){
                     field?.addValidators(Validators.required);

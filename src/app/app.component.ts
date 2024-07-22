@@ -6,6 +6,7 @@ import { JsonPipe } from '@angular/common';
 import { InputSelectComponent } from './formly/inputs/input-select/input-select.component';
 import { InputSwitchComponent } from './formly/inputs/input-switch/input-switch.component';
 import { Observable, of, delay } from 'rxjs';
+import { InputRepeatComponent } from './formly/inputs/input-repeat/input-repeat.component';
 
 export function hasUpperCaseValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
@@ -21,6 +22,7 @@ export function containsNumberValidator(): AsyncValidatorFn {
   return (control: AbstractControl): Observable<ValidationErrors | null> => {
     const value = control.value;
     const hasNumber = /\d/.test(value);
+    console.log('hasNumber', hasNumber);
     return of(hasNumber ? null : { containsNumber: true }).pipe(
       delay(1 * 1000)
     );
@@ -46,17 +48,20 @@ export class AppComponent {
 
     this.initFields();
 
-    setTimeout(() => {
-      this.model.set({ 
-        name: '2',
-        min: 1,
-       });
-    }, 100);
+    // setTimeout(() => {
+    //   this.model.set({ 
+    //     name: '2',
+    //     min: 1,
+    //    });
+    // }, 100);
 
     setTimeout(() => {
       this.model.set({ 
-        name: '123',
+        name: 'DD1123',
         min: 2,
+        address: {
+          city: 'New York'
+        }
        });
     }, 200);
 
@@ -131,7 +136,7 @@ export class AppComponent {
               name: 'abc',
               // minLength: 2,
             });
-            console.log('value', value);
+            console.log('model.isDev', model.isDev);
             if(model.isDev){
               this.fields.set([
                 ...this.fields(),
@@ -166,6 +171,49 @@ export class AppComponent {
           options: options,
         }
       },
+      {
+        key: 'address.city',
+        component: InputTextComponent,
+        props: {
+          label: 'City',
+        }
+      },
+      {
+        key: 'address.street',
+        component: InputTextComponent,
+        props: {
+          label: 'Street',
+        }
+      },
+      {
+        key: 'todos',
+        component: InputRepeatComponent,
+        props: {
+          label: 'Todos',
+        },
+        fields: signal([
+          {
+            key: 'title',
+            component: InputTextComponent,
+            validators: {
+              required: true,
+            },
+            props: {
+              label: 'Title',
+            }
+          },
+          {
+            key: 'completed',
+            component: InputSwitchComponent,
+            props: {
+              label: 'Completed',
+              customLabel: true,
+            },
+            change: (model:any, value:any) => 
+              console.log('model', model)
+          }
+        ])
+      }
     ]);
 
     setTimeout(() => {
@@ -181,8 +229,8 @@ export class AppComponent {
   }
 
   onSubmit() {
-    console.log(this.form.pending) // async validators
-    console.log(this.form.valid)
+    console.log('pending', this.form.pending) // async validators
+    console.log('valid', this.form.valid)
     console.log(this.form.value)
     // alert(JSON.stringify(this.model()));
   }
